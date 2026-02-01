@@ -15,7 +15,6 @@ set t_kd=OB
 set t_kr=OC
 set t_kl=OD
 
-" 2026/2/1 OSC 52 非対応端末対応
 if executable('pbcopy') || executable('xclip')
     function! OSC52Yank(str)
         let b64 = system('base64 | tr -d "\n"', a:str)
