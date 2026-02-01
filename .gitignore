@@ -4,5 +4,4 @@
 .*/
 # 管理したいファイルだけを例外にする
 !.vimrc
-!.bashrc
 !.gitignore
