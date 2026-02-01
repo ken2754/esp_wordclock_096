@@ -15,16 +15,18 @@ set t_kd=OB
 set t_kr=OC
 set t_kl=OD
 
-function! OSC52Yank(str)
-    let b64 = system('base64 | tr -d "\n"', a:str)
-    let osc = "\e]52;c;" . b64 . "\x07"
-    call writefile([osc], '/dev/tty', 'ab')
-endfunction
+if executable('pbcopy') || executable('xclip')
+    function! OSC52Yank(str)
+        let b64 = system('base64 | tr -d "\n"', a:str)
+        let osc = "\e]52;c;" . b64 . "\x07"
+        call writefile([osc], '/dev/tty', 'ab')
+    endfunction
 
-augroup osc52
-    autocmd!
-    autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
-augroup END
+    augroup osc52
+        autocmd!
+        autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
+    augroup END
+endif
 
 if hostname() ==# 'penguin'
     call plug#begin()
