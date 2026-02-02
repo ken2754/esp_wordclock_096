@@ -1,31 +1,33 @@
 syntax on
 filetype plugin indent on
-
 set number
-set clipboard=unnamedplus
-
+set clipboard=unnamed,unnamedplus
 set mouse=a
 set tabstop=4
 set shiftwidth=4
 set expandtab
-
 set nocompatible
-set t_ku=OA
-set t_kd=OB
-set t_kr=OC
-set t_kl=OD
 
-if executable('pbcopy') || executable('xclip')
-    function! OSC52Yank(str)
-        let b64 = system('base64 | tr -d "\n"', a:str)
-        let osc = "\e]52;c;" . b64 . "\x07"
-        call writefile([osc], '/dev/tty', 'ab')
-    endfunction
+if has('unix') && hostname() ==# 'penguin'
+    set t_ku=OA
+    set t_kd=OB
+    set t_kr=OC
+    set t_kl=OD
+endif
 
-    augroup osc52
-        autocmd!
-        autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
-    augroup END
+if has('unix')
+    if executable('pbcopy') || executable('xclip')
+        function! OSC52Yank(str)
+            let b64 = system('base64 | tr -d "\n"', a:str)
+            let osc = "\e]52;c;" . b64 . "\x07"
+            call writefile([osc], '/dev/tty', 'ab')
+        endfunction
+
+        augroup osc52
+            autocmd!
+            autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
+        augroup END
+    endif
 endif
 
 if hostname() ==# 'penguin'
