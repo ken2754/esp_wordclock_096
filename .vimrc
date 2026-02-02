@@ -8,11 +8,14 @@ set shiftwidth=4
 set expandtab
 set nocompatible
 
-if has('unix') && hostname() ==# 'penguin'
-    set t_ku=OA
-    set t_kd=OB
-    set t_kr=OC
-    set t_kl=OD
+" --- カーソルキー / 端末依存の修正 ---
+" Windows(win32/64) 以外、かつ SSH 接続時や特定ターミナルで有効化
+if has('unix') && !has('gui_running')
+    " すべての UNIX 系環境（Penguin, ArkOS, dArkOS）で適用
+    set t_ku= OA
+    set t_kd= OB
+    set t_kr= OC
+    set t_kl= OD
 endif
 
 if has('unix')
