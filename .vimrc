@@ -1,14 +1,36 @@
-syntax on
-filetype plugin indent on
-set number
+" GENERAL {{{
+set nocompatible
 set clipboard=unnamedplus
 set mouse=a
+" }}}
+
+" SCREEN {{{
+syntax on
+filetype plugin indent on
+
+set number
+set wrap
 set tabstop=4
 set shiftwidth=4
 set expandtab
-set nocompatible
+set foldmethod=marker
+
+let g:markdown_fenced_languages = ['go', 'python', 'javascript', 'vim']
+
+set splitright
+set splitbelow
+
 set background=dark
 colorscheme retrobox
+" }}}
+
+" KEY {{{
+nnoremap <Space> za
+
+nnoremap j gj
+nnoremap k gk
+
+let mapleader = "\<Space>"
 
 if has('unix') && !has('gui_running')
     set t_ku=OA
@@ -16,7 +38,9 @@ if has('unix') && !has('gui_running')
     set t_kr=OC
     set t_kl=OD
 endif
+" }}} 
 
+" OSC52 {{{
 if has('unix')
     if executable('pbcopy') || executable('xclip')
         function! OSC52Yank(str)
@@ -30,10 +54,13 @@ if has('unix')
         augroup END
     endif
 endif
+" }}}
 
+" PLUGIN {{{
 let s:plug_dir = '~/.vim/plugged'
 call plug#begin(s:plug_dir)
     Plug 'dense-analysis/ale'
-    Plug 'pprovost/vim-ps1'
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
+" }}}
+
