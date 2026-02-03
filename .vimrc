@@ -2,6 +2,11 @@
 set nocompatible
 set clipboard=unnamedplus
 set mouse=a
+
+if !isdirectory(expand('~/.vim/swap'))
+    call mkdir(expand('~/.vim/swap'), 'p')
+endif
+set directory=~/.vim/swap//
 " }}}
 
 " SCREEN {{{
