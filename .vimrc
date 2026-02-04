@@ -45,19 +45,22 @@ if has('unix') && !has('gui_running')
 endif
 " }}} 
 
-" OSC52 {{{
+" OSC52 & Local Clipboard {{{
 if has('unix')
-    if executable('pbcopy') || executable('xclip')
-        function! OSC52Yank(str)
-            let b64 = system('base64 | tr -d "\n"', a:str)
-            let osc = "\e]52;c;" . b64 . "\x07"
-            call writefile([osc], '/dev/tty', 'ab')
-        endfunction
-        augroup osc52
-            autocmd!
-            autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
-        augroup END
-    endif
+    set clipboard=unnamedplus
+
+    function! OSC52Yank(str)
+        " 外部ツールに頼らず base64 と echo で OSC52 シーケンスを作成
+        let b64 = system('base64 | tr -d "\n"', a:str)
+        let osc = "\e]52;c;" . b64 . "\x07"
+        " /dev/tty (現在の端末) に直接書き込む
+        call writefile([osc], '/dev/tty', 'ab')
+    endfunction
+
+    augroup osc52
+        autocmd!
+        autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
+    augroup END
 endif
 " }}}
 
@@ -68,4 +71,8 @@ call plug#begin(s:plug_dir)
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 " }}}
+
+" GEMINI {{{
+" 垂直分割で Gemini 対話画面（Google 認証優先モード）を開く
+command! GeminiChat :vertical terminal ++close env GEMINI_API_KEY= gemini
 
