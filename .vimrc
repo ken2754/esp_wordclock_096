@@ -1,4 +1,4 @@
-" GENERAL
+" GENERAL {{{
 set nocompatible
 set clipboard=unnamedplus
 set mouse=a
@@ -7,8 +7,9 @@ if !isdirectory(expand('~/.vim/swap'))
     call mkdir(expand('~/.vim/swap'), 'p')
 endif
 set directory=~/.vim/swap//
+" }}}
 
-" SCREEN
+" SCREEN {{{
 syntax on
 filetype plugin indent on
 if has('gui_running')
@@ -31,11 +32,13 @@ let g:markdown_fenced_languages = ['go', 'python', 'javascript', 'vim']
 
 set splitright
 set splitbelow
+set foldmethod=marker
 
 set background=dark
 colorscheme retrobox
+" }}}
 
-" KEY
+" KEY {{{
 nnoremap j gj
 nnoremap k gk
 
@@ -45,16 +48,15 @@ if has('unix') && !has('gui_running')
     set t_kr=OC
     set t_kl=OD
 endif
+" }}}
 
-" OSC52
+" OSC52 {{{
 if has('unix')
     set clipboard=unnamedplus
 
     function! OSC52Yank(str)
-        " 外部ツールに頼らず base64 と echo で OSC52 シーケンスを作成
         let b64 = system('base64 | tr -d "\n"', a:str)
         let osc = "\e]52;c;" . b64 . "\x07"
-        " /dev/tty (現在の端末) に直接書き込む
         call writefile([osc], '/dev/tty', 'ab')
     endfunction
 
@@ -63,16 +65,17 @@ if has('unix')
         autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
     augroup END
 endif
+" }}}
 
-" PLUGIN
+" PLUGIN {{{
 let s:plug_dir = '~/.vim/plugged'
 call plug#begin(s:plug_dir)
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     Plug 'cweagans/vim-taskpaper'
 call plug#end()
+" }}}
 
-" GEMINI
-" 垂直分割で Gemini 対話画面（Google 認証優先モード）を開く
+" GEMINI {{{
 command! GeminiChat :vertical terminal ++close env GEMINI_API_KEY= gemini
-
+" }}}
