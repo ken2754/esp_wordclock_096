@@ -11,7 +11,13 @@ set directory=~/.vim/swap//
 " SCREEN
 syntax on
 filetype plugin indent on
-set guifont=Noto\ Sans\ Mono\ CJK\ JP\ Regular\ 12
+if has('gui_running')
+  if has('win32') || has('win64')
+    set guifont=Noto_Sans_Mono_CJK_JP:h12
+  elseif has('unix')
+    set guifont=Noto\ Sans\ Mono\ CJK\ JP\ 12
+  endif
+endif
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
 
