@@ -42,6 +42,8 @@ colorscheme retrobox
 nnoremap j gj
 nnoremap k gk
 
+nnoremap <Space> za
+
 if has('unix') && !has('gui_running')
     set t_ku=OA
     set t_kd=OB
@@ -72,7 +74,7 @@ let s:plug_dir = '~/.vim/plugged'
 call plug#begin(s:plug_dir)
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-    Plug 'cweagans/vim-taskpaper'
+    Plug 'davidoc/taskpaper.vim'
 call plug#end()
 " }}}
 
