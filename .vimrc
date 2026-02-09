@@ -81,3 +81,11 @@ call plug#end()
 " GEMINI {{{
 command! GeminiChat :vertical terminal ++close env GEMINI_API_KEY= gemini
 " }}}
+
+" TASKPAPER {{{
+" .taskpaper を保存した直後に、画面を邪魔せず同期スクリプトを走らせる
+augroup TaskPaperAutoSync
+    autocmd!
+    autocmd BufWritePost *.taskpaper silent !bash ~/git/todo/sync.sh &
+augroup END
+" }}}
