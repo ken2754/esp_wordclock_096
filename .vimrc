@@ -86,6 +86,6 @@ command! GeminiChat :vertical terminal ++close env GEMINI_API_KEY= gemini
 " .taskpaper を保存した直後に、画面を邪魔せず同期スクリプトを走らせる
 augroup TaskPaperAutoSync
     autocmd!
-    autocmd BufWritePost *.taskpaper silent !bash ~/git/todo/sync.sh &
+    autocmd BufWritePost *.taskpaper silent !bash ~/git/todo/tpush.sh &
 augroup END
 " }}}
