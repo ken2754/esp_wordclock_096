@@ -2,6 +2,8 @@
 set nocompatible
 set clipboard=unnamedplus
 set mouse=a
+set visualbell t_vb=
+set noerrorbells
 
 if !isdirectory(expand('~/.vim/swap'))
     call mkdir(expand('~/.vim/swap'), 'p')
@@ -28,7 +30,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-let g:markdown_fenced_languages = ['go', 'python', 'javascript', 'vim']
+let g:markdown_fenced_languages = ['go', 'python', 'javascript', 'powershell', 'vim']
 
 set splitright
 set splitbelow
@@ -41,8 +43,13 @@ colorscheme retrobox
 " KEY {{{
 nnoremap j gj
 nnoremap k gk
-
 nnoremap <Space> za
+
+inoremap ( ()<Left>
+inoremap { {}<Left>
+inoremap [ []<Left>
+inoremap " ""<Left>
+inoremap ' ''<Left>
 
 if has('unix') && !has('gui_running')
     set t_ku=OA
@@ -79,12 +86,43 @@ call plug#end()
 " }}}
 
 " GEMINI {{{
-command! GeminiChat :vertical terminal ++close env GEMINI_API_KEY= gemini
+command! GeminiChat :vertical terminal ++cols=40 ++close
 " }}}
 
 " TASKPAPER {{{
+command! Ttoday call s:replace_start_with_today()
+
+function! s:replace_start_with_today() abort
+  let l:today = strftime('%Y-%m-%d')
+  silent! execute '%s/@start(\zs\d\{4}-\d\{2}-\d\{2}\ze)/\=s:compare_and_replace(submatch(0), l:today)/ge'
+  silent! execute '%s/@start(today)/@today/ge'
+  silent! execute 'global/@done/s/\s*@today\s*//ge'
+  execute "normal \<Plug>TaskPaperShowToday"
+  normal gg
+  set nohlsearch
+  echo "Ready for today! (@start updated, @done cleaned, and filtered by @today)"
+endfunction
+
+function! s:compare_and_replace(date_str, today_str) abort
+  if a:date_str <= a:today_str
+    return "today"
+  endif
+  return a:date_str
+endfunction
+
 augroup TaskPaperAutoSync
     autocmd!
-    autocmd BufWritePost *.taskpaper execute 'terminal ++rows=10 ' . expand('~/git/todo/tpush.sh')
+    autocmd BufWritePost *.taskpaper call s:sync_taskpaper()
+    autocmd VimLeavePre  *.taskpaper call s:sync_taskpaper()
 augroup END
+
+function! s:sync_taskpaper()
+    let l:path = expand('$HOME/git/todo/tpush.sh')
+    if has('win32')
+        let l:path = tr(l:path, '\', '/')
+    endif
+    let l:cmd = "sh \"" . l:path . "\""
+    execute "term " . l:cmd
+    wincmd p
+endfunction
 " }}}
