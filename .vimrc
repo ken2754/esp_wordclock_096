@@ -1,6 +1,12 @@
 " GENERAL {{{
 set nocompatible
-set clipboard=unnamedplus
+if has('clipboard')
+    if has('win32') || has('win64')
+        set clipboard=unnamed,unnamedplus
+    else
+        set clipboard=unnamedplus
+    endif
+endif
 set mouse=a
 set visualbell t_vb=
 set noerrorbells
@@ -82,6 +88,7 @@ call plug#begin(s:plug_dir)
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     Plug 'davidoc/taskpaper.vim'
+    Plug 'stefandtw/quickfix-reflector.vim'
 call plug#end()
 " }}}
 
@@ -90,26 +97,6 @@ command! GeminiChat :vertical terminal ++cols=40 ++close
 " }}}
 
 " TASKPAPER {{{
-command! Ttoday call s:replace_start_with_today()
-
-function! s:replace_start_with_today() abort
-  let l:today = strftime('%Y-%m-%d')
-  silent! execute '%s/@start(\zs\d\{4}-\d\{2}-\d\{2}\ze)/\=s:compare_and_replace(submatch(0), l:today)/ge'
-  silent! execute '%s/@start(today)/@today/ge'
-  silent! execute 'global/@done/s/\s*@today\s*//ge'
-  execute "normal \<Plug>TaskPaperShowToday"
-  normal gg
-  set nohlsearch
-  echo "Ready for today! (@start updated, @done cleaned, and filtered by @today)"
-endfunction
-
-function! s:compare_and_replace(date_str, today_str) abort
-  if a:date_str <= a:today_str
-    return "today"
-  endif
-  return a:date_str
-endfunction
-
 augroup TaskPaperAutoSync
     autocmd!
     autocmd BufWritePost *.taskpaper call s:sync_taskpaper()
@@ -124,5 +111,26 @@ function! s:sync_taskpaper()
     let l:cmd = "sh \"" . l:path . "\""
     execute "term " . l:cmd
     wincmd p
+endfunction
+
+command! Ttoday call s:replace_start_with_today()
+
+function! s:replace_start_with_today() abort
+  let l:today = strftime('%Y-%m-%d')
+  silent! execute '%s/@start(\zs\d\{4}-\d\{2}-\d\{2}\ze)/\=s:compare_and_replace(submatch(0), l:today)/ge'
+  silent! execute '%s/@start(today)/@today/ge'
+  silent! execute 'global/@done/s/\s\+@today//ge'
+  silent! execute 'global/@done/s/@today\s*//ge'
+  execute "normal \<Plug>TaskPaperShowToday"
+  normal gg
+  set nohlsearch
+  echo "Ready for today!"
+endfunction
+
+function! s:compare_and_replace(date_str, today_str) abort
+  if a:date_str <= a:today_str
+    return "today"
+  endif
+  return a:date_str
 endfunction
 " }}}
