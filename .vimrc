@@ -1,18 +1,32 @@
 " GENERAL {{{
+set runtimepath+=$HOME/.vim
 set nocompatible
+
 if has('clipboard')
     if has('win32') || has('win64')
-        set clipboard=unnamed,unnamedplus
+        set clipboard=unnamed
+        augroup FixWindowsYank
+            autocmd!
+            autocmd TextYankPost * let @* = @"
+        augroup END
     else
         set clipboard=unnamedplus
     endif
 endif
+
 set mouse=a
 set visualbell t_vb=
 set noerrorbells
 
 if !isdirectory(expand('~/.vim/swap'))
     call mkdir(expand('~/.vim/swap'), 'p')
+endif
+
+if executable('pwsh')
+    set shell=pwsh
+    set shellcmdflag=-c
+    set shellquote=
+    set shellxquote=
 endif
 set directory=~/.vim/swap//
 " }}}
