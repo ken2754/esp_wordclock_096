@@ -125,7 +125,6 @@ function! s:sync_taskpaper()
     endif
     let l:cmd = "sh \"" . l:path . "\""
     execute "term " . l:cmd
-    wincmd p
 endfunction
 
 command! Ttoday call s:replace_start_with_today()
