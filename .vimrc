@@ -46,6 +46,7 @@ set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis
 
 set number
 set wrap
+set breakindent
 set tabstop=4
 set shiftwidth=4
 set expandtab
