@@ -108,7 +108,7 @@ call plug#end()
 " }}}
 
 " GEMINI {{{
-command! GeminiChat :vertical terminal ++cols=40 ++close
+command! GeminiChat :vertical terminal ++cols=40 ++close GEMINI_API_KEY= gemini
 " }}}
 
 " TASKPAPER {{{
