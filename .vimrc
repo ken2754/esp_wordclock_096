@@ -3,15 +3,15 @@ set runtimepath+=$HOME/.vim
 set nocompatible
 
 if has('clipboard')
-    if has('win32') || has('win64')
-        set clipboard=unnamed
-        augroup FixWindowsYank
-            autocmd!
-            autocmd TextYankPost * let @* = @"
-        augroup END
-    else
-        set clipboard=unnamedplus
-    endif
+		if has('win32') || has('win64')
+				set clipboard=unnamed
+				augroup FixWindowsYank
+						autocmd!
+						autocmd TextYankPost * let @* = @"
+				augroup END
+		else
+				set clipboard=unnamedplus
+		endif
 endif
 
 set mouse=a
@@ -19,14 +19,14 @@ set visualbell t_vb=
 set noerrorbells
 
 if !isdirectory(expand('~/.vim/swap'))
-    call mkdir(expand('~/.vim/swap'), 'p')
+		call mkdir(expand('~/.vim/swap'), 'p')
 endif
 
 if executable('pwsh')
-    set shell=pwsh
-    set shellcmdflag=-c
-    set shellquote=
-    set shellxquote=
+		set shell=pwsh
+		set shellcmdflag=-c
+		set shellquote=
+		set shellxquote=
 endif
 set directory=~/.vim/swap//
 " }}}
@@ -77,10 +77,10 @@ inoremap " ""<Left>
 inoremap ' ''<Left>
 
 if has('unix') && !has('gui_running')
-    set t_ku=OA
-    set t_kd=OB
-    set t_kr=OC
-    set t_kl=OD
+		set t_ku=OA
+		set t_kd=OB
+		set t_kr=OC
+		set t_kl=OD
 endif
 
 if has('win32') || has('win64')
@@ -94,18 +94,18 @@ endif
 
 " OSC52 {{{
 if has('unix')
-    set clipboard=unnamedplus
+		set clipboard=unnamedplus
 
-    function! OSC52Yank(str)
-        let b64 = system('base64 | tr -d "\n"', a:str)
-        let osc = "\e]52;c;" . b64 . "\x07"
-        call writefile([osc], '/dev/tty', 'ab')
-    endfunction
+		function! OSC52Yank(str)
+				let b64 = system('base64 | tr -d "\n"', a:str)
+				let osc = "\e]52;c;" . b64 . "\x07"
+				call writefile([osc], '/dev/tty', 'ab')
+		endfunction
 
-    augroup osc52
-        autocmd!
-        autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
-    augroup END
+		augroup osc52
+				autocmd!
+				autocmd TextYankPost * if v:event.operator == 'y' | call OSC52Yank(join(v:event.regcontents, "\n")) | endif
+		augroup END
 endif
 " }}}
 
@@ -124,20 +124,19 @@ call plug#end()
 
 
 " GEMINI {{{
-command! GeminiChat :vertical terminal ++cols=40 ++close
+command! GeminiChat :vertical terminal ++cols=40 ++close GEMINI_API_KEY= gemini
 " }}}
 
 
 
 " TASKPAPER {{{
 function! s:sync_taskpaper()
-    let l:path = expand('$HOME/git/todo/tpush.sh')
-    if has('win32')
-        let l:path = tr(l:path, '\', '/')
-    endif
-    let l:cmd = "sh \"" . l:path . "\""
-    execute "term " . l:cmd
-    wincmd p
+		let l:path = expand('$HOME/git/todo/tpush.sh')
+		if has('win32')
+				let l:path = tr(l:path, '\', '/')
+		endif
+		let l:cmd = "sh \"" . l:path . "\""
+		execute "term " . l:cmd
 endfunction
 
 function! s:replace_start_with_today() abort
