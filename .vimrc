@@ -303,6 +303,7 @@ augroup MyTaskPaperSettings
         onoremap <buffer> <silent> ap :<C-u>call SelectTaskPaperProject(0, 'line')<CR>
         vnoremap <buffer> <silent> qp :<C-u>call SelectTaskPaperProject(0, 'block')<CR>
         onoremap <buffer> <silent> qp :<C-u>call SelectTaskPaperProject(0, 'block')<CR>
+        call s:replace_start_with_today()
     }
 augroup END
 
