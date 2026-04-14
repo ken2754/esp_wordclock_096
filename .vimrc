@@ -1,6 +1,7 @@
 " GENERAL {{{
 set runtimepath+=$HOME/.vim
 set nocompatible
+set nrformats=hex,bin,alpha,unsigned
 
 if has('clipboard')
     if has('win32') || has('win64')
