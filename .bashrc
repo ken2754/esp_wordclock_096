@@ -154,3 +154,4 @@ export DefaultIMModule=fcitx
 
 # Created by `pipx` on 2026-07-05 07:47:32
 export PATH="$PATH:/home/ken/.local/bin"
+alias get_idf='. $HOME/esp/esp-idf/export.sh'
