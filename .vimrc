@@ -314,3 +314,28 @@ augroup TaskPaperAutoSync
     autocmd VimLeavePre  *.taskpaper call s:sync_taskpaper()
 augroup END
 " }}}
+
+
+
+" Vibe Coding for ESP-IDF {{{
+" --- 外部変更の自動再読み込み (Aider 連携用) ---
+set autoread
+set updatetime=300
+augroup VibeCodingAutoRead
+  autocmd!
+  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * checktime
+augroup END
+
+" --- ALE & clangd 設定 (ESP-IDF 補完・解析用) ---
+let g:ale_linters = {
+\   'c': ['clangd'],
+\   'cpp': ['clangd'],
+\}
+" カレントディレクトリ直下の compile_commands.json を参照
+let g:ale_c_clangd_options = '-compile-commands-dir=' . getcwd()
+let g:ale_cpp_clangd_options = '-compile-commands-dir=' . getcwd()
+
+" 保存時だけでなく変更時にも解析を実行
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+" }}}
