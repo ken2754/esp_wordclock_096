@@ -134,9 +134,11 @@ function bgm() {
 }
 
 export EDITOR="vim"
-alias rg='ssh ark@192.168.0.100'
-alias rp='ssh ark@192.168.0.101'
-alias rs='ssh ark@192.168.0.102'
+alias rg353vs='ssh root@192.168.0.100'
+alias r36plus='ssh ark@192.168.0.101'
+alias r36s='ssh ark@192.168.0.102'
+alias kindle4='ssh -i ~/.ssh/id_rsa_kindle -o PubkeyAcceptedAlgorithms=+ssh-rsa -o IdentitiesOnly=yes root@192.168.0.104'
+alias rp6='ssh root@192.168.0.106'
 
 
 export NVM_DIR="$HOME/.config/nvm"
@@ -155,3 +157,7 @@ export DefaultIMModule=fcitx
 # Created by `pipx` on 2026-07-05 07:47:32
 export PATH="$PATH:/home/ken/.local/bin"
 alias get_idf='. $HOME/esp/esp-idf/export.sh'
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/ken/.local/bin:$PATH"
